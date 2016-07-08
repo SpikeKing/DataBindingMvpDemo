@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">MvpDataBindingDemo</string>
+
+    <!--导航栏的标题-->
+    <string name="navigation_view_header_title">TO-DOs</string>
+
+    <!--导航栏项的标题-->
+    <string name="list_title">TO-DO List</string>
+    <string name="statistics_title">Statistics</string>
+
+    <!--Task的显示类型-->
+    <string name="label_all">All TO-DOs</string>
+    <string name="label_active">Active TO-DOs</string>
+    <string name="label_completed">Completed TO-DOs</string>
+
+    <!--没有Task显示的标题-->
+    <string name="no_tasks_all">You have no TO-DOs!</string>
+    <string name="no_tasks_active">You have no active TO-DOs!</string>
+    <string name="no_tasks_completed">You have no completed TO-DOs!</string>
+
+    <!--菜单的标题-->
+    <string name="menu_filter">Filter</string>
+    <string name="menu_clear">Clear completed</string>
+    <string name="refresh">Refresh</string>
+
+    <!--菜单的选择类别标题-->
+    <string name="nav_all">All</string>
+    <string name="nav_active">Active</string>
+    <string name="nav_completed">Completed</string>
+
+    <!--添加新的Task-->
+    <string name="no_tasks_add">Add a TO-DO item +</string>
+
+    <!--添加Tasks的标题和描述-->
+    <string name="title_hint">Title</string>
+    <string name="description_hint">Enter your TO-DO here.</string>
+
+    <!--添加或修改Task的标题-->
+    <string name="add_task">New TO-DO</string>
+    <string name="edit_task">Edit TO-DO</string>
+
+    <!--新建或修改任务是空时的错误提示-->
+    <string name="empty_task_message">TO DOs cannot be empty</string>
+
+</resources>

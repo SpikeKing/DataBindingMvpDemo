@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--使用DataBinding模式-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--DataBinding的标准写法, 引入View, 控制变量ViewModel和Presenter-->
+    <data>
+
+        <import type="android.view.View"/>
+
+        <!--主要包含get和is方法-->
+        <variable
+            name="tasks"
+            type="org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel"/>
+
+        <variable
+            name="actionHandler"
+            type="org.wangchenlong.mvpdatabindingdemo.tasks.TasksContract.Presenter"/>
+    </data>
+
+    <!--TODO: 下拉刷新的滑动设置onRefresh-->
+    <org.wangchenlong.mvpdatabindingdemo.widgets.ScrollChildSwipeRefreshLayout
+        android:id="@+id/tasks_scsrl_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--主要布局, 分为两部分, Tasks是否为空-->
+        <RelativeLayout
+            android:id="@+id/tasks_rl_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--包含Tasks-->
+            <LinearLayout
+                android:id="@+id/tasks_ll_have_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="@{tasks.notEmpty ? View.VISIBLE: View.GONE}">
+
+                <!--当前显示的Task类型-->
+                <TextView
+                    android:id="@+id/tasks_tv_filtering_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="center_vertical"
+                    android:text="@{tasks.currentFilteringLabel}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+                <!--Tasks的显示列表-->
+                <ListView
+                    android:id="@+id/tasks_lv_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tasks_ll_no_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="@{tasks.notEmpty ? View.GONE : View.VISIBLE}">
+
+                <ImageView
+                    android:id="@+id/tasks_iv_no_tasks_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@{tasks.noTaskIconRes}"/>
+
+                <TextView
+                    android:id="@+id/tasks_tv_no_tasks_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:text="@{tasks.noTasksLabel}"/>
+
+                <TextView
+                    android:id="@+id/tasks_tv_no_tasks_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bkg_touch_feedback"
+                    android:gravity="center"
+                    android:onClick="@{() -> actionHandler.addNewTask()}"
+                    android:text="@string/no_tasks_add"
+                    android:visibility="@{tasks.tasksAddViewVisible ? View.VISIBLE : View.GONE}"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </org.wangchenlong.mvpdatabindingdemo.widgets.ScrollChildSwipeRefreshLayout>
+</layout>

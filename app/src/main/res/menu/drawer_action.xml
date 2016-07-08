@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--导航栏的项-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/list_navi_menu_item"
+        android:icon="@drawable/ic_list"
+        android:title="@string/list_title"/>
+
+    <item
+        android:id="@+id/statistic_navi_menu_item"
+        android:icon="@drawable/ic_statistics"
+        android:title="@string/statistics_title"/>
+
+</menu>
