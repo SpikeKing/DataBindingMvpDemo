@@ -40,7 +40,6 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     }
 
     public AddEditTaskFragment() {
-
     }
 
     public static AddEditTaskFragment newInstance() {
