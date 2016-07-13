@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="task"
+            type="org.wangchenlong.mvpdatabindingdemo.data.Task"/>
+
+        <variable
+            name="actionHandler"
+            type="org.wangchenlong.mvpdatabindingdemo.tasks.TasksItemActionHandler"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:background="@{task.isCompleted ? @drawable/list_completed_touch_feedback : @drawable/touch_feedback}"
+        android:onClick="@{() -> actionHandler.taskClicked(task)}"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <CheckBox
+            android:id="@+id/task_item_cb_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:checked="@{task.isCompleted}"
+            android:onCheckedChanged="@{(cb, isChecked) -> actionHandler.completeChanged(task, isChecked)}"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="@{task.titleForList}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+    </LinearLayout>
+
+</layout>

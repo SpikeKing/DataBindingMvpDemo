@@ -1,5 +1,7 @@
 package org.wangchenlong.mvpdatabindingdemo.tasks;
 
+import android.support.annotation.NonNull;
+
 import org.wangchenlong.mvpdatabindingdemo.bases.BasePresenter;
 import org.wangchenlong.mvpdatabindingdemo.bases.BaseView;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
@@ -18,6 +20,15 @@ public interface TasksContract {
 
         // 显示Task的列表
         void showTasks(List<Task> tasks);
+
+        // 设置加载Indicator
+        void setLoadingIndicator(boolean active);
+
+        // 加载页面, 用于控制网络状态, 防止在网络返回时, 页面已经卸载
+        boolean isActive();
+
+        // 显示加载错误
+        void showLoadingTasksError();
     }
 
     interface Presenter extends BasePresenter {
@@ -35,5 +46,14 @@ public interface TasksContract {
 
         // 添加新的Task
         void addNewTask();
+
+        // 完成任务
+        void completeTask(@NonNull Task completedTask);
+
+        // 激活任务
+        void activateTask(@NonNull Task activeTask);
+
+        // 完成任务详情
+        void openTaskDetails(@NonNull Task requestedTask);
     }
 }

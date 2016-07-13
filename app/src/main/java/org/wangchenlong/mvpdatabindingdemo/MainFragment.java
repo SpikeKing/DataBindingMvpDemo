@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
@@ -13,15 +14,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.wangchenlong.mvpdatabindingdemo.addedittask.AddEditTaskActivity;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
 import org.wangchenlong.mvpdatabindingdemo.databinding.FragmentTasksBinding;
+import org.wangchenlong.mvpdatabindingdemo.tasks.TasksAdapter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksContract;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -37,10 +41,7 @@ public class MainFragment extends Fragment implements TasksContract.View {
     private TasksContract.Presenter mPresenter; // Presenter, View绑定Presenter
     private TasksViewModel mViewModel; // ViewModel, View改变时广播通知
 
-
-    @Override public void setPresenter(TasksContract.Presenter presenter) {
-        mPresenter = checkNotNull(presenter);
-    }
+    private TasksAdapter mTasksListAdapter; // 任务列表的适配器
 
     public MainFragment() {
     }
@@ -61,6 +62,15 @@ public class MainFragment extends Fragment implements TasksContract.View {
     }
 
     /**
+     * 设置Presenter
+     *
+     * @param presenter 控制页面
+     */
+    @Override public void setPresenter(TasksContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
+    /**
      * 设置ViewModel
      *
      * @param viewModel ViewModel
@@ -76,6 +86,12 @@ public class MainFragment extends Fragment implements TasksContract.View {
         tasksBinding.setTasks(mViewModel);
         tasksBinding.setActionHandler(mPresenter);
 
+        // ListView的设置
+        ListView listView = tasksBinding.tasksLvList;
+        mTasksListAdapter = new TasksAdapter(new ArrayList<>(0), mPresenter);
+        listView.setAdapter(mTasksListAdapter);
+
+        // Fab按钮添加任务
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.main_fab_add_task);
         fab.setImageResource(R.drawable.ic_add);
         fab.setOnClickListener(v -> mPresenter.addNewTask());
@@ -153,6 +169,7 @@ public class MainFragment extends Fragment implements TasksContract.View {
     @Override public void showTasks(List<Task> tasks) {
         // 显示全部任务
         if (tasks != null) {
+            mTasksListAdapter.replaceData(tasks);
             mViewModel.setTaskListSize(tasks.size());
         } else {
             mViewModel.setTaskListSize(0);
@@ -161,6 +178,32 @@ public class MainFragment extends Fragment implements TasksContract.View {
 
     private void testToast(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override public void setLoadingIndicator(boolean active) {
+
+    }
+
+    // 判断是否加载页面, 用于处理一些异步任务, 网络加载完成.
+    @Override public boolean isActive() {
+        return isAdded();
+    }
+
+    // 加载任务错误
+    @Override public void showLoadingTasksError() {
+        showMessage(getString(R.string.loading_tasks_error));
+    }
+
+    /**
+     * 显示信息
+     *
+     * @param message 信息
+     */
+    private void showMessage(String message) {
+        View view = getView();
+        if (view != null) {
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+        }
     }
 }
 
