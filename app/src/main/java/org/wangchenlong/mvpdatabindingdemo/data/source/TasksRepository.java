@@ -211,4 +211,70 @@ public class TasksRepository implements TasksDataSource {
         // 刷新任务后, 数据被污染
         mCacheIsDirty = true;
     }
+
+    /**
+     * 完成任务, 处理本地与远程的任务.
+     *
+     * @param task 任务
+     */
+    @Override public void completeTask(@NonNull Task task) {
+        checkNotNull(task);
+        mTasksLocalDataSource.completeTask(task);
+        mTasksRemoteDataSource.completeTask(task);
+
+        Task completedTask = new Task(task.getId(), task.getTitle(),
+                task.getDescription(), true);
+
+        // 缓存任务
+        if (mCachedTasks == null) {
+            mCachedTasks = new LinkedHashMap<>();
+        }
+        mCachedTasks.put(task.getId(), completedTask);
+    }
+
+    /**
+     * 完成任务
+     *
+     * @param taskId 任务Id
+     */
+    @Override public void completeTask(@NonNull String taskId) {
+        checkNotNull(taskId);
+        Task task = getTaskWithId(taskId);
+        if (task != null) {
+            completeTask(task);
+        }
+    }
+
+    /**
+     * 激活任务, 处理本地与远程任务
+     *
+     * @param task 任务
+     */
+    @Override public void activateTask(@NonNull Task task) {
+        checkNotNull(task);
+        mTasksLocalDataSource.activateTask(task);
+        mTasksRemoteDataSource.activateTask(task);
+
+        // 激活任务, 默认是false
+        Task activeTask = new Task(task.getId(),
+                task.getTitle(), task.getDescription());
+
+        if (mCachedTasks == null) {
+            mCachedTasks = new LinkedHashMap<>();
+        }
+        mCachedTasks.put(task.getId(), activeTask);
+    }
+
+    /**
+     * 激活任务
+     *
+     * @param taskId 任务Id
+     */
+    @Override public void activateTask(@NonNull String taskId) {
+        checkNotNull(taskId);
+        Task task = getTaskWithId(taskId);
+        if (task != null) {
+            activateTask(task);
+        }
+    }
 }

@@ -44,4 +44,8 @@
 
     <!--加载任务错误, 页面提示的Toast-->
     <string name="loading_tasks_error">Error while loading tasks</string>
+
+    <!--显示完成或者激活任务的消息-->
+    <string name="task_marked_complete">Task marked complete</string>
+    <string name="task_marked_active">Task marked active</string>
 </resources>

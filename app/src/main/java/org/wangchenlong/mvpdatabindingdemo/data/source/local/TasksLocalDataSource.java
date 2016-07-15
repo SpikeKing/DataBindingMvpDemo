@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
+import org.wangchenlong.mvpdatabindingdemo.data.source.local.TasksDbHelper.TaskEntry;
 import org.wangchenlong.mvpdatabindingdemo.data.source.TasksDataSource;
 
 import java.util.ArrayList;
@@ -22,12 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TasksLocalDataSource implements TasksDataSource {
 
     private static TasksLocalDataSource sInstance; // 单例
-    private final Context mContext; // 上下文
     private TasksDbHelper mDbHelper; // 数据库
 
     private TasksLocalDataSource(Context context) {
-        mContext = context;
-        mDbHelper = new TasksDbHelper(mContext);
+        checkNotNull(context);
+        mDbHelper = new TasksDbHelper(context); // 初始化数据库
     }
 
     public static TasksLocalDataSource getInstance(@NonNull Context context) {
@@ -42,20 +42,21 @@ public class TasksLocalDataSource implements TasksDataSource {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
-                TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID,
-                TasksDbHelper.TaskEntry.COLUMN_NAME_TITLE,
-                TasksDbHelper.TaskEntry.COLUMN_NAME_DESCRIPTION,
-                TasksDbHelper.TaskEntry.COLUMN_NAME_COMPLETED
+                TaskEntry.COLUMN_NAME_ENTRY_ID,
+                TaskEntry.COLUMN_NAME_TITLE,
+                TaskEntry.COLUMN_NAME_DESCRIPTION,
+                TaskEntry.COLUMN_NAME_COMPLETED
         };
 
-        Cursor c = db.query(TasksDbHelper.TaskEntry.TABLE_NAME, projection, null, null, null, null, null);
+        Cursor c = db.query(TaskEntry.TABLE_NAME,
+                projection, null, null, null, null, null);
 
         if (c != null && c.getCount() > 0) {
             while (c.moveToNext()) {
-                String itemId = c.getString(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID));
-                String title = c.getString(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_TITLE));
-                String description = c.getString(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_DESCRIPTION));
-                boolean completed = c.getInt(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
+                String itemId = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_ENTRY_ID));
+                String title = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_TITLE));
+                String description = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DESCRIPTION));
+                boolean completed = c.getInt(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
                 Task task = new Task(itemId, title, description, completed);
                 tasks.add(task);
             }
@@ -80,18 +81,19 @@ public class TasksLocalDataSource implements TasksDataSource {
 
         // 需要从数据库获取的内容
         String[] projection = {
-                TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID,
-                TasksDbHelper.TaskEntry.COLUMN_NAME_TITLE,
-                TasksDbHelper.TaskEntry.COLUMN_NAME_DESCRIPTION,
-                TasksDbHelper.TaskEntry.COLUMN_NAME_COMPLETED
+                TaskEntry.COLUMN_NAME_ENTRY_ID,
+                TaskEntry.COLUMN_NAME_TITLE,
+                TaskEntry.COLUMN_NAME_DESCRIPTION,
+                TaskEntry.COLUMN_NAME_COMPLETED
         };
 
         // 查询的列Id
-        String selection = TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String selection = TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
         String[] selectionArgs = {taskId}; // 查询的标志位
 
         // 获取数据库的游标
-        Cursor c = db.query(TasksDbHelper.TaskEntry.TABLE_NAME,
+        Cursor c = db.query(
+                TaskEntry.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -99,12 +101,13 @@ public class TasksLocalDataSource implements TasksDataSource {
 
         // 从数据库的游标中获取数据
         Task task = null;
+
         if (c != null && c.getCount() > 0) {
             c.moveToFirst(); // 移动数据库的光标
-            String itemId = c.getString(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID));
-            String title = c.getString(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_TITLE));
-            String description = c.getString(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_DESCRIPTION));
-            boolean completed = c.getInt(c.getColumnIndexOrThrow(TasksDbHelper.TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
+            String itemId = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_ENTRY_ID));
+            String title = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_TITLE));
+            String description = c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DESCRIPTION));
+            boolean completed = c.getInt(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
             task = new Task(itemId, title, description, completed);
         }
 
@@ -150,7 +153,52 @@ public class TasksLocalDataSource implements TasksDataSource {
     }
 
     @Override public void refreshTasks() {
-        // @link TaskRepository使用
+        // 供{@link TaskRepository}使用
     }
 
+    /**
+     * 完成任务
+     *
+     * @param task 任务
+     */
+    @Override public void completeTask(@NonNull Task task) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // 任务的完成状态
+        ContentValues values = new ContentValues();
+        values.put(TasksDbHelper.TaskEntry.COLUMN_NAME_COMPLETED, true);
+
+        // 更新完成状态
+        String selection = TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String[] selectionsArgs = {task.getId()};
+        db.update(TasksDbHelper.TaskEntry.TABLE_NAME, values, selection, selectionsArgs);
+        db.close();
+    }
+
+    @Override public void completeTask(@NonNull String taskId) {
+        // 供{@link TaskRepository}使用
+    }
+
+    /**
+     * 激活任务
+     *
+     * @param task 任务
+     */
+    @Override public void activateTask(@NonNull Task task) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // 任务的完成状态
+        ContentValues values = new ContentValues();
+        values.put(TasksDbHelper.TaskEntry.COLUMN_NAME_COMPLETED, false);
+
+        // 更新完成状态
+        String selection = TasksDbHelper.TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String[] selectionsArgs = {task.getId()};
+        db.update(TasksDbHelper.TaskEntry.TABLE_NAME, values, selection, selectionsArgs);
+        db.close();
+    }
+
+    @Override public void activateTask(@NonNull String taskId) {
+        // 供{@link TaskRepository}使用
+    }
 }

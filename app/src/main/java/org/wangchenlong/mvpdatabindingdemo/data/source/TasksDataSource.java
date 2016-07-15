@@ -61,4 +61,32 @@ public interface TasksDataSource {
      * 刷新任务, 刷新后数据被污染, 需要重新加载
      */
     void refreshTasks();
+
+    /**
+     * 完成任务
+     *
+     * @param task 任务
+     */
+    void completeTask(@NonNull Task task);
+
+    /**
+     * 完成任务
+     *
+     * @param taskId 任务Id
+     */
+    void completeTask(@NonNull String taskId);
+
+    /**
+     * 激活任务
+     *
+     * @param task 任务
+     */
+    void activateTask(@NonNull Task task);
+
+    /**
+     * 激活任务
+     *
+     * @param taskId 任务Id
+     */
+    void activateTask(@NonNull String taskId);
 }

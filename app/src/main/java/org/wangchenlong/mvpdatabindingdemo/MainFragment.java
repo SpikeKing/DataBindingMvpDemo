@@ -15,12 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.wangchenlong.mvpdatabindingdemo.addedittask.AddEditTaskActivity;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
 import org.wangchenlong.mvpdatabindingdemo.databinding.FragmentTasksBinding;
-import org.wangchenlong.mvpdatabindingdemo.tasks.TasksAdapter;
+import org.wangchenlong.mvpdatabindingdemo.tasks.TasksListAdapter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksContract;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel;
@@ -38,10 +37,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class MainFragment extends Fragment implements TasksContract.View {
 
-    private TasksContract.Presenter mPresenter; // Presenter, View绑定Presenter
-    private TasksViewModel mViewModel; // ViewModel, View改变时广播通知
-
-    private TasksAdapter mTasksListAdapter; // 任务列表的适配器
+    private TasksContract.Presenter mPresenter; // Presenter, View绑定Presenter, 控制逻辑操作.
+    private TasksViewModel mViewModel; // ViewModel, 在状态改变时, 广播通知, 修改View.
+    private TasksListAdapter mTasksListAdapter; // 显示任务列表的适配器.
 
     public MainFragment() {
     }
@@ -88,7 +86,7 @@ public class MainFragment extends Fragment implements TasksContract.View {
 
         // ListView的设置
         ListView listView = tasksBinding.tasksLvList;
-        mTasksListAdapter = new TasksAdapter(new ArrayList<>(0), mPresenter);
+        mTasksListAdapter = new TasksListAdapter(new ArrayList<>(0), mPresenter);
         listView.setAdapter(mTasksListAdapter);
 
         // Fab按钮添加任务
@@ -176,10 +174,6 @@ public class MainFragment extends Fragment implements TasksContract.View {
         }
     }
 
-    private void testToast(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
-
     @Override public void setLoadingIndicator(boolean active) {
 
     }
@@ -192,6 +186,16 @@ public class MainFragment extends Fragment implements TasksContract.View {
     // 加载任务错误
     @Override public void showLoadingTasksError() {
         showMessage(getString(R.string.loading_tasks_error));
+    }
+
+    // 显示任务的完成消息
+    @Override public void showTaskMarkedComplete() {
+        showMessage(getString(R.string.task_marked_complete));
+    }
+
+    // 显示任务的激活消息
+    @Override public void showTaskMarkedActive() {
+        showMessage(getString(R.string.task_marked_active));
     }
 
     /**

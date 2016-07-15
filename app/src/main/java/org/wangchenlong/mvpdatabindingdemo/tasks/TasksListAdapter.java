@@ -16,7 +16,7 @@ import java.util.List;
  * <p>
  * Created by wangchenlong on 16/7/13.
  */
-public class TasksAdapter extends BaseAdapter {
+public class TasksListAdapter extends BaseAdapter {
     private List<Task> mTasks; // 显示的Tasks
     // Presenter的地位, 就是用户活动监听
     private TasksContract.Presenter mUserActionsListener; // 监听
@@ -27,7 +27,7 @@ public class TasksAdapter extends BaseAdapter {
      * @param tasks               任务
      * @param userActionsListener 监听
      */
-    public TasksAdapter(List<Task> tasks, TasksContract.Presenter userActionsListener) {
+    public TasksListAdapter(List<Task> tasks, TasksContract.Presenter userActionsListener) {
         setList(tasks);
         mUserActionsListener = userActionsListener;
     }

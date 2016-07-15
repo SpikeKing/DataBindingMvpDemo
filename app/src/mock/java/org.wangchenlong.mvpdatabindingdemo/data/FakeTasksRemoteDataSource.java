@@ -50,6 +50,36 @@ public class FakeTasksRemoteDataSource implements TasksDataSource {
     }
 
     @Override public void refreshTasks() {
-        // TasksRepository使用
+        // 供{@link TasksRepository}使用
+    }
+
+    /**
+     * 完成任务
+     *
+     * @param task 任务
+     */
+    @Override public void completeTask(@NonNull Task task) {
+        Task completedTask = new Task(
+                task.getTitle(), task.getDescription(), task.getId(), true);
+        TASKS_SERVICE_DATA.put(task.getId(), completedTask);
+    }
+
+    @Override public void completeTask(@NonNull String taskId) {
+        // 供{@link TasksRepository}使用
+    }
+
+    /**
+     * 激活任务
+     *
+     * @param task 任务
+     */
+    @Override public void activateTask(@NonNull Task task) {
+        Task activeTask = new Task(
+                task.getTitle(), task.getDescription(), task.getId(), false);
+        TASKS_SERVICE_DATA.put(task.getId(), activeTask);
+    }
+
+    @Override public void activateTask(@NonNull String taskId) {
+        // 供{@link TasksRepository}使用
     }
 }

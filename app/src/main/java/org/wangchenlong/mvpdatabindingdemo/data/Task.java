@@ -1,8 +1,12 @@
 package org.wangchenlong.mvpdatabindingdemo.data;
 
 import android.annotation.TargetApi;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import org.wangchenlong.mvpdatabindingdemo.BR;
 
 import java.util.Objects;
 import java.util.UUID;

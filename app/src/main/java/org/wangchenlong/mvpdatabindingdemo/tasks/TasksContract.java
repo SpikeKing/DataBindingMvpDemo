@@ -29,6 +29,12 @@ public interface TasksContract {
 
         // 显示加载错误
         void showLoadingTasksError();
+
+        // 显示任务完成的消息
+        void showTaskMarkedComplete();
+
+        // 显示任务激活的消息
+        void showTaskMarkedActive();
     }
 
     interface Presenter extends BasePresenter {
@@ -55,5 +61,7 @@ public interface TasksContract {
 
         // 完成任务详情
         void openTaskDetails(@NonNull Task requestedTask);
+
+        // TODO: 缺少清除完成任务的方法
     }
 }

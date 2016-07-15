@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksPresenter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel;
 import org.wangchenlong.mvpdatabindingdemo.utils.ActivityUtils;
@@ -18,11 +19,14 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    // 当前显示的Task类型, 过滤的Key
+    private static final String CURRENT_FILTERING_KEY = "MainActivity.CURRENT_FILTERING_KEY";
+
     @BindView(R.id.main_tl_toolbar) Toolbar mTlToolbar;
     @BindView(R.id.main_dl_drawer_layout) DrawerLayout mDlDrawerLayout;
     @BindView(R.id.main_nv_nav_view) NavigationView mNvNavView;
 
-    private TasksPresenter mTasksPresenter; // Presenter
+    private TasksPresenter mTasksPresenter; // Tasks的Presenter, 负责处理页面逻辑
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +62,22 @@ public class MainActivity extends AppCompatActivity {
                 mainFragment);
 
         // View绑定ViewModel
-        TasksViewModel tasksViewModel = new TasksViewModel(getApplicationContext(), mTasksPresenter);
+        TasksViewModel tasksViewModel =
+                new TasksViewModel(getApplicationContext(), mTasksPresenter);
         mainFragment.setViewModel(tasksViewModel);
 
-        // TODO: 处理状态
+        // 读取Tasks的类型
+        if (savedInstanceState != null) {
+            TasksFilterType currentFiltering =
+                    (TasksFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
+            mTasksPresenter.setFiltering(currentFiltering);
+        }
+    }
+
+    // 切换页面时, 存储Tasks的类型
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(CURRENT_FILTERING_KEY, mTasksPresenter.getFiltering());
+        super.onSaveInstanceState(outState);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {

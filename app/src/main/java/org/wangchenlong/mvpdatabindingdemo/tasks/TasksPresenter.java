@@ -136,12 +136,26 @@ public class TasksPresenter implements TasksContract.Presenter {
         mTasksView.showAddTask();
     }
 
+    /**
+     * 完成任务, 点击任务侧面的复选框, 选中即完成
+     *
+     * @param completedTask 完成的任务
+     */
     @Override public void completeTask(@NonNull Task completedTask) {
-
+        checkNotNull(completedTask, "completedTask cannot be null!");
+        mTasksRepository.completeTask(completedTask);
+        mTasksView.showTaskMarkedComplete();
     }
 
+    /**
+     * 激活任务, 未点击任务侧面的复选框, 未选中即激活
+     *
+     * @param activeTask 激活任务
+     */
     @Override public void activateTask(@NonNull Task activeTask) {
-
+        checkNotNull(activeTask, "activeTask cannot be null!");
+        mTasksRepository.activateTask(activeTask);
+        mTasksView.showTaskMarkedActive();
     }
 
     @Override public void openTaskDetails(@NonNull Task requestedTask) {
