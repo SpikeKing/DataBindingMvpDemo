@@ -48,4 +48,14 @@
     <!--显示完成或者激活任务的消息-->
     <string name="task_marked_complete">Task marked complete</string>
     <string name="task_marked_active">Task marked active</string>
+
+    <!--统计的激活和完成任务-->
+    <string name="statistics_active_tasks">Active tasks:</string>
+    <string name="statistics_completed_tasks">Completed tasks:</string>
+
+    <!--统计页面的加载任务和加载错误-->
+    <string name="loading">LOADING</string>
+
+    <!--统计没有任务的显示-->
+    <string name="statistics_no_tasks">Your have no tasks.</string>
 </resources>

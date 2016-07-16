@@ -1,5 +1,6 @@
 package org.wangchenlong.mvpdatabindingdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import org.wangchenlong.mvpdatabindingdemo.statistics.StatisticsActivity;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksPresenter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel;
@@ -102,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
                     // 列表按钮什么都不做
                     break;
                 case R.id.statistic_navi_menu_item:
-                    // TODO: 添加统计页面
+                    Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
+                    // 单例启动, 清除其他
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     break;
                 default:
                     break;

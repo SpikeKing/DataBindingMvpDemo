@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <!--View的状态-->
+        <import type="android.view.View"/>
+
+        <variable
+            name="statistics"
+            type="org.wangchenlong.mvpdatabindingdemo.statistics.StatisticsViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@{statistics.status}"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="@{statistics.showStatus ? View.VISIBLE : View.GONE}"/>
+
+        <LinearLayout
+            android:id="@+id/statistic_ll_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="@{statistics.showStatus ? View.GONE : View.VISIBLE}">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/statistics_no_tasks"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="@{statistics.empty ? View.VISIBLE : View.GONE}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{statistics.numberOfActiveTasks}"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="@{statistics.empty ? View.GONE : View.VISIBLE}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{statistics.numberOfCompletedTasks}"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="@{statistics.empty ? View.GONE : View.VISIBLE}"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</layout>

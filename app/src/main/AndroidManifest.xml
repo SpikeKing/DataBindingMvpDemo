@@ -19,6 +19,7 @@
         </activity>
 
         <activity android:name=".addedittask.AddEditTaskActivity"/>
+        <activity android:name=".statistics.StatisticsActivity"/>
     </application>
 
 </manifest>
