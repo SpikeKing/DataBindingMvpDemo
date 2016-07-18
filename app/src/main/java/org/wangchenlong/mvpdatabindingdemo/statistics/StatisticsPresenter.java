@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
 import org.wangchenlong.mvpdatabindingdemo.data.source.TasksDataSource;
 import org.wangchenlong.mvpdatabindingdemo.data.source.TasksRepository;
+import org.wangchenlong.mvpdatabindingdemo.utils.EspressoIdlingResource;
 
 import java.util.List;
 
@@ -45,8 +46,17 @@ public class StatisticsPresenter implements StatisticsContract.Presenter {
     @Override public void loadStatistics() {
         mStatisticsView.setProgressIndicator(true); // 设置加载标记
 
+        // 空闲资源的控制
+        EspressoIdlingResource.increment(); // App is busy until further notice
+
         mTasksRepository.getTasks(new TasksDataSource.LoadTasksCallback() {
             @Override public void onTasksLoaded(List<Task> tasks) {
+
+                // 空闲资源是否非闲置
+                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                    EspressoIdlingResource.decrement(); // Set app as idle.
+                }
+
                 mStatisticsView.setProgressIndicator(false); // 加载完成
                 mStatisticsView.displayStatistics(tasks); // 显示任务
             }

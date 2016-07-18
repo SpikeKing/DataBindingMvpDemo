@@ -2,7 +2,9 @@ package org.wangchenlong.mvpdatabindingdemo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.NavigationView;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -15,6 +17,7 @@ import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksPresenter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel;
 import org.wangchenlong.mvpdatabindingdemo.utils.ActivityUtils;
+import org.wangchenlong.mvpdatabindingdemo.utils.EspressoIdlingResource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,4 +122,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
+    }
 }
