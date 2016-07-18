@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
+import org.wangchenlong.mvpdatabindingdemo.Injection;
 import org.wangchenlong.mvpdatabindingdemo.R;
+import org.wangchenlong.mvpdatabindingdemo.utils.ActivityUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +46,18 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         String taskId = getIntent().getStringExtra(EXTRA_TASK_ID);
 
+        TaskDetailFragment fragment = (TaskDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.task_detail_fl_content_frame);
+
+        if (fragment == null) {
+            fragment = TaskDetailFragment.newInstance(taskId);
+
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    fragment, R.id.task_detail_fl_content_frame);
+        }
+
+        new TaskDetailPresenter(fragment, taskId,
+                Injection.providerTasksRepository(getApplicationContext()));
 
     }
 

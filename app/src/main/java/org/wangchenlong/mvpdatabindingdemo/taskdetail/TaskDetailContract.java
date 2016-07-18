@@ -22,6 +22,9 @@ public interface TaskDetailContract {
 
         // 显示任务已经标记激活
         void showTaskMarkedActive();
+
+        // 显示任务删除
+        void showTaskDeleted();
     }
 
     interface Presenter extends BasePresenter {

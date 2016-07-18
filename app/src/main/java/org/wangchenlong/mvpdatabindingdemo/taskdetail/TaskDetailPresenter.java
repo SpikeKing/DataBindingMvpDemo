@@ -67,7 +67,12 @@ public class TaskDetailPresenter implements TaskDetailContract.Presenter {
         }
     }
 
+    /**
+     * 删除任务
+     */
     @Override public void deleteTask() {
         // 删除任务
+        mRepository.deleteTask(mTaskId);
+        mTaskDetailView.showTaskDeleted();
     }
 }

@@ -39,7 +39,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_edit"
             app:fabSize="normal"
-            app:layout_anchor="@id/task_add_fl_content_frame"
+            app:layout_anchor="@id/task_detail_fl_content_frame"
             app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>

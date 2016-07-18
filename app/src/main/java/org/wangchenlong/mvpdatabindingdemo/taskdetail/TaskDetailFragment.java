@@ -149,4 +149,11 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                     Snackbar.LENGTH_LONG).show();
         }
     }
+
+    /**
+     * 显示任务的删除, 直接关闭页面
+     */
+    @Override public void showTaskDeleted() {
+        getActivity().finish(); // 直接关闭页面
+    }
 }
