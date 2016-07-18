@@ -20,6 +20,7 @@
 
         <activity android:name=".addedittask.AddEditTaskActivity"/>
         <activity android:name=".statistics.StatisticsActivity"/>
+        <activity android:name=".taskdetail.TaskDetailActivity"/>
     </application>
 
 </manifest>

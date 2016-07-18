@@ -19,6 +19,7 @@ import android.widget.ListView;
 import org.wangchenlong.mvpdatabindingdemo.addedittask.AddEditTaskActivity;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
 import org.wangchenlong.mvpdatabindingdemo.databinding.FragmentTasksBinding;
+import org.wangchenlong.mvpdatabindingdemo.taskdetail.TaskDetailActivity;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksListAdapter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksContract;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
@@ -48,35 +49,6 @@ public class MainFragment extends Fragment implements TasksContract.View {
         return new MainFragment();
     }
 
-    @Override public void onResume() {
-        super.onResume();
-        // Presenter绑定View的生命周期, 还可以添加
-        mPresenter.start();
-    }
-
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Presenter处理View的Activity返回值
-        mPresenter.result(requestCode, resultCode);
-    }
-
-    /**
-     * 设置Presenter
-     *
-     * @param presenter 控制页面
-     */
-    @Override public void setPresenter(TasksContract.Presenter presenter) {
-        mPresenter = checkNotNull(presenter);
-    }
-
-    /**
-     * 设置ViewModel
-     *
-     * @param viewModel ViewModel
-     */
-    public void setViewModel(TasksViewModel viewModel) {
-        mViewModel = viewModel;
-    }
-
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // 设置DataBinding
@@ -102,6 +74,17 @@ public class MainFragment extends Fragment implements TasksContract.View {
         return root;
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        // Presenter绑定View的生命周期, 还可以添加
+        mPresenter.start();
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Presenter处理View的Activity返回值
+        mPresenter.result(requestCode, resultCode);
+    }
+
     @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.tasks_menu, menu);
     }
@@ -122,6 +105,24 @@ public class MainFragment extends Fragment implements TasksContract.View {
                 break;
         }
         return true;
+    }
+
+    /**
+     * 设置Presenter
+     *
+     * @param presenter 控制页面
+     */
+    @Override public void setPresenter(TasksContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
+    /**
+     * 设置ViewModel
+     *
+     * @param viewModel ViewModel
+     */
+    public void setViewModel(TasksViewModel viewModel) {
+        mViewModel = viewModel;
     }
 
     /**
@@ -196,6 +197,13 @@ public class MainFragment extends Fragment implements TasksContract.View {
     // 显示任务的激活消息
     @Override public void showTaskMarkedActive() {
         showMessage(getString(R.string.task_marked_active));
+    }
+
+    // 显示任务详情的UI
+    @Override public void showTaskDetailsUi(String taskId) {
+        Intent intent = new Intent(getContext(), TaskDetailActivity.class);
+        intent.putExtra(TaskDetailActivity.EXTRA_TASK_ID, taskId); // 传输TaskId
+        startActivity(intent); // 启动业务详情页面
     }
 
     /**

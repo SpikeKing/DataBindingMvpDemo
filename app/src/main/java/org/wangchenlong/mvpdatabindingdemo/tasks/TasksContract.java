@@ -35,6 +35,9 @@ public interface TasksContract {
 
         // 显示任务激活的消息
         void showTaskMarkedActive();
+
+        // 显示任务详情的Ui, 跳转页面
+        void showTaskDetailsUi(String taskId);
     }
 
     interface Presenter extends BasePresenter {

@@ -8,7 +8,7 @@ import org.wangchenlong.mvpdatabindingdemo.data.Task;
  * Created by wangchenlong on 16/7/13.
  */
 public class TasksItemActionHandler {
-    private TasksContract.Presenter mPresenter;
+    private TasksContract.Presenter mPresenter; // 表示层
 
     /**
      * 设置Presenter
@@ -34,11 +34,11 @@ public class TasksItemActionHandler {
     }
 
     /**
-     * 点击任务
+     * 点击任务, 显示任务详情
      *
      * @param task 打开任务详情
      */
     public void taskClicked(Task task) {
-        mPresenter.openTaskDetails(task);
+        mPresenter.openTaskDetails(task); // 显示任务详情
     }
 }

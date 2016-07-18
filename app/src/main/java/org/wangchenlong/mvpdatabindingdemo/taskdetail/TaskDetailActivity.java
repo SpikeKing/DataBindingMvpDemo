@@ -8,5 +8,5 @@ import android.support.v7.app.AppCompatActivity;
  * Created by wangchenlong on 16/7/7.
  */
 public class TaskDetailActivity extends AppCompatActivity {
-    public static final int REQUEST_ADD_TASK = 1;
+    public static final String EXTRA_TASK_ID = "TaskDetailActivity.EXTRA_TASK_ID";
 }

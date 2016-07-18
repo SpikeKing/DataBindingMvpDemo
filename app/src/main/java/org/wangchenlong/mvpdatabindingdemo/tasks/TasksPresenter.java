@@ -158,7 +158,14 @@ public class TasksPresenter implements TasksContract.Presenter {
         mTasksView.showTaskMarkedActive();
     }
 
+    /**
+     * 打开任务详情.
+     *
+     * @param requestedTask 需要的任务
+     */
     @Override public void openTaskDetails(@NonNull Task requestedTask) {
-
+        checkNotNull(requestedTask, "requestedTask cannot be null!");
+        // 调用View, 跳转显示Task的UI页面
+        mTasksView.showTaskDetailsUi(requestedTask.getId());
     }
 }
