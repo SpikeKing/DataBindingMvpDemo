@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 
 import org.wangchenlong.mvpdatabindingdemo.data.source.TasksDataSource;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,5 +82,19 @@ public class FakeTasksRemoteDataSource implements TasksDataSource {
 
     @Override public void activateTask(@NonNull String taskId) {
         // 供{@link TasksRepository}使用
+    }
+
+    @Override public void deleteTask(@NonNull String taskId) {
+        TASKS_SERVICE_DATA.remove(taskId);
+    }
+
+    @Override public void clearCompletedTasks() {
+        Iterator<Map.Entry<String, Task>> it = TASKS_SERVICE_DATA.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Task> entry = it.next();
+            if (entry.getValue().isCompleted()) {
+                it.remove();
+            }
+        }
     }
 }

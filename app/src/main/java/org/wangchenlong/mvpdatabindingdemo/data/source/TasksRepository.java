@@ -8,6 +8,7 @@ import org.wangchenlong.mvpdatabindingdemo.data.Task;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -198,10 +199,17 @@ public class TasksRepository implements TasksDataSource {
     }
 
     /**
-     * 删除任务
+     * 删除全部任务
      */
     @Override public void deleteAllTasks() {
+        mTasksRemoteDataSource.deleteAllTasks();
+        mTasksLocalDataSource.deleteAllTasks();
 
+        if (mCachedTasks == null) {
+            mCachedTasks = new LinkedHashMap<>();
+        }
+
+        mCachedTasks.clear();
     }
 
     /**
@@ -275,6 +283,39 @@ public class TasksRepository implements TasksDataSource {
         Task task = getTaskWithId(taskId);
         if (task != null) {
             activateTask(task);
+        }
+    }
+
+    /**
+     * 根据Task的Id删除任务
+     *
+     * @param taskId 任务Id
+     */
+    @Override public void deleteTask(@NonNull String taskId) {
+        mTasksRemoteDataSource.deleteTask(checkNotNull(taskId));
+        mTasksLocalDataSource.deleteTask(checkNotNull(taskId));
+
+        mCachedTasks.remove(taskId);
+    }
+
+    /**
+     * 清除完成的任务
+     */
+    @Override public void clearCompletedTasks() {
+        mTasksLocalDataSource.clearCompletedTasks();
+        mTasksRemoteDataSource.clearCompletedTasks();
+
+        if (mCachedTasks == null) {
+            mCachedTasks = new LinkedHashMap<>();
+            return;
+        }
+
+        Iterator<Map.Entry<String, Task>> it = mCachedTasks.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Task> entry = it.next();
+            if (entry.getValue().isCompleted()) {
+                it.remove();
+            }
         }
     }
 }

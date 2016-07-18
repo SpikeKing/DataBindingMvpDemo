@@ -58,6 +58,13 @@ public interface TasksDataSource {
     void deleteAllTasks();
 
     /**
+     * 删除Task的Id
+     *
+     * @param taskId 任务Id
+     */
+    void deleteTask(@NonNull String taskId);
+
+    /**
      * 刷新任务, 刷新后数据被污染, 需要重新加载
      */
     void refreshTasks();
@@ -89,4 +96,9 @@ public interface TasksDataSource {
      * @param taskId 任务Id
      */
     void activateTask(@NonNull String taskId);
+
+    /**
+     * 清除所有完成任务
+     */
+    void clearCompletedTasks();
 }

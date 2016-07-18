@@ -201,4 +201,27 @@ public class TasksLocalDataSource implements TasksDataSource {
     @Override public void activateTask(@NonNull String taskId) {
         // 供{@link TaskRepository}使用
     }
+
+    /**
+     * 根据Task的Id删除任务
+     *
+     * @param taskId 任务Id
+     */
+    @Override public void deleteTask(@NonNull String taskId) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase(); // 数据库
+        String selection = TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String[] selectionArgs = {taskId};
+        db.delete(TaskEntry.TABLE_NAME, selection, selectionArgs);
+    }
+
+    /**
+     * 清理完成的任务
+     */
+    @Override public void clearCompletedTasks() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        String selection = TaskEntry.COLUMN_NAME_COMPLETED + " LIKE ?";
+        String[] selectionArgs = {"1"}; // 完成任务的标志
+        db.delete(TaskEntry.TABLE_NAME, selection, selectionArgs);
+        db.close();
+    }
 }

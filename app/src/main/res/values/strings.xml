@@ -58,4 +58,10 @@
 
     <!--统计没有任务的显示-->
     <string name="statistics_no_tasks">Your have no tasks.</string>
+
+    <!--任务详情页面没有数据-->
+    <string name="no_data">No data</string>
+
+    <!--任务详情页面的删除任务-->
+    <string name="menu_delete_task">Delete task</string>
 </resources>
