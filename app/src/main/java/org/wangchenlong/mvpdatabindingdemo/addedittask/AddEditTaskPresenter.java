@@ -92,7 +92,7 @@ public class AddEditTaskPresenter implements AddEditTaskContract.Presenter {
             throw new RuntimeException("updateTask() was called but task is new.");
         }
 
-        mTasksRepository.saveTask(new Task(title, description, mTaskId));
+        mTasksRepository.saveTask(new Task(mTaskId, title, description));
         mAddTaskView.showTasksList(); // 编辑完成后显示列表
     }
 
