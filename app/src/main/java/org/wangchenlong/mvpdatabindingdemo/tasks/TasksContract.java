@@ -38,6 +38,12 @@ public interface TasksContract {
 
         // 显示任务详情的Ui, 跳转页面
         void showTaskDetailsUi(String taskId);
+
+        // 显示清除的完成任务
+        void showCompletedTasksCleared();
+
+        // 显示完成存储的消息
+        void showSuccessfullySavedMessage();
     }
 
     interface Presenter extends BasePresenter {
@@ -65,6 +71,7 @@ public interface TasksContract {
         // 完成任务详情
         void openTaskDetails(@NonNull Task requestedTask);
 
-        // TODO: 缺少清除完成任务的方法
+        // 缺少清除完成任务的方法
+        void clearCompletedTasks();
     }
 }

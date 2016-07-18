@@ -64,4 +64,10 @@
 
     <!--任务详情页面的删除任务-->
     <string name="menu_delete_task">Delete task</string>
+
+    <!--存储任务的消息-->
+    <string name="successfully_saved_task_message">TO-DO saved</string>
+
+    <!--清除完成任务的消息-->
+    <string name="completed_tasks_cleared">Completed tasks cleared</string>
 </resources>

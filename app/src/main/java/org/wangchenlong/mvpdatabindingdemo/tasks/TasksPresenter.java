@@ -168,4 +168,13 @@ public class TasksPresenter implements TasksContract.Presenter {
         // 调用View, 跳转显示Task的UI页面
         mTasksView.showTaskDetailsUi(requestedTask.getId());
     }
+
+    /**
+     * 清除完成的任务后加载
+     */
+    @Override public void clearCompletedTasks() {
+        mTasksRepository.clearCompletedTasks();
+        mTasksView.showCompletedTasksCleared();
+        loadTasks(false, false);
+    }
 }

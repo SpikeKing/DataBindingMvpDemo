@@ -93,7 +93,7 @@ public class MainFragment extends Fragment implements TasksContract.View {
         switch (item.getItemId()) {
             // 清除完成的任务
             case R.id.menu_clear:
-                // TODO: 清除完成的任务
+                mPresenter.clearCompletedTasks();
                 break;
             // 切换Tasks类型操作
             case R.id.menu_filter:
@@ -204,6 +204,20 @@ public class MainFragment extends Fragment implements TasksContract.View {
         Intent intent = new Intent(getContext(), TaskDetailActivity.class);
         intent.putExtra(TaskDetailActivity.EXTRA_TASK_ID, taskId); // 传输TaskId
         startActivity(intent); // 启动业务详情页面
+    }
+
+    /**
+     * 显示清除的完成任务
+     */
+    @Override public void showCompletedTasksCleared() {
+        showMessage(getString(R.string.completed_tasks_cleared));
+    }
+
+    /**
+     * 显示成功存储信息
+     */
+    @Override public void showSuccessfullySavedMessage() {
+        showMessage(getString(R.string.successfully_saved_task_message));
     }
 
     /**
