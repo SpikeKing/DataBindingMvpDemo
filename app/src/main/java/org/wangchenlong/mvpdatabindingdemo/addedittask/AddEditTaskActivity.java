@@ -2,8 +2,10 @@ package org.wangchenlong.mvpdatabindingdemo.addedittask;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.widget.FrameLayout;
 import org.wangchenlong.mvpdatabindingdemo.Injection;
 import org.wangchenlong.mvpdatabindingdemo.R;
 import org.wangchenlong.mvpdatabindingdemo.utils.ActivityUtils;
+import org.wangchenlong.mvpdatabindingdemo.utils.EspressoIdlingResource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,12 +75,18 @@ public class AddEditTaskActivity extends AppCompatActivity {
                 addEditTaskFragment, R.id.task_add_fl_content_frame);
 
         // 初始化Presenter
-        new AddEditTaskPresenter(Injection.providerTasksRepository(getApplicationContext()),
+        new AddEditTaskPresenter(Injection.provideTasksRepository(getApplicationContext()),
                 addEditTaskFragment, taskId);
     }
 
     @Override public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    // 编辑完成需要空闲
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 }

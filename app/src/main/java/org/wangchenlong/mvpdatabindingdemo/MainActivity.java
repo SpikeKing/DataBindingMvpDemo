@@ -56,14 +56,13 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.main_fl_content_frame);
         if (mainFragment == null) {
             mainFragment = MainFragment.newInstance();
-
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(), mainFragment, R.id.main_fl_content_frame);
         }
 
         // 初始化Presenter, 添加数据源和View, 内部View绑定Presenter
         mTasksPresenter = new TasksPresenter(
-                Injection.providerTasksRepository(getApplicationContext()),
+                Injection.provideTasksRepository(getApplicationContext()),
                 mainFragment);
 
         // View绑定ViewModel
@@ -109,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.statistic_navi_menu_item:
                     Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
                     // 单例启动, 清除其他
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     break;
                 default:

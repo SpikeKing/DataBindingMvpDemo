@@ -17,11 +17,11 @@
             type="org.wangchenlong.mvpdatabindingdemo.tasks.TasksContract.Presenter"/>
     </data>
 
-    <!--TODO: 下拉刷新的滑动设置onRefresh-->
     <org.wangchenlong.mvpdatabindingdemo.widgets.ScrollChildSwipeRefreshLayout
         android:id="@+id/tasks_scsrl_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:onRefresh="@{actionHandler}">
 
         <!--主要布局, 分为两部分, Tasks是否为空-->
         <RelativeLayout

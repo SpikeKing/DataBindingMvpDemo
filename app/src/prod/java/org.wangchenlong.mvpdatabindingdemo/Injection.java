@@ -3,7 +3,7 @@ package org.wangchenlong.mvpdatabindingdemo;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import org.wangchenlong.mvpdatabindingdemo.data.FakeTasksRemoteDataSource;
+import org.wangchenlong.mvpdatabindingdemo.data.source.remote.TasksRemoteDataSource;
 import org.wangchenlong.mvpdatabindingdemo.data.source.TasksRepository;
 import org.wangchenlong.mvpdatabindingdemo.data.source.local.TasksLocalDataSource;
 
@@ -17,7 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class Injection {
     public static TasksRepository provideTasksRepository(@NonNull Context context) {
         checkNotNull(context);
-        return TasksRepository.getInstance(FakeTasksRemoteDataSource.getInstance(),
+        return TasksRepository.getInstance(TasksRemoteDataSource.getInstance(),
                 TasksLocalDataSource.getInstance(context));
     }
 }

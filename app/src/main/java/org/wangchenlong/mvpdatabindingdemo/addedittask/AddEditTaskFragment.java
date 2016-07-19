@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.wangchenlong.mvpdatabindingdemo.R;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
@@ -29,8 +30,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class AddEditTaskFragment extends Fragment implements AddEditTaskContract.View {
     public static final String ARGUMENT_EDIT_TASK_ID = "AddEditTaskFragment.ARGUMENT_EDIT_TASK_ID";
 
-    @BindView(R.id.task_add_et_title) EditText mEtTitle;
-    @BindView(R.id.task_add_et_description) EditText mEtDescription;
+    TextView mEtTitle;
+    TextView mEtDescription;
 
     private AddEditTaskContract.Presenter mPresenter;
     private FragmentAddTaskBinding mTaskBinding;
@@ -54,8 +55,12 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_add_task, container, false);
-        ButterKnife.bind(this, root);
+
+        mEtTitle = (TextView) root.findViewById(R.id.task_add_et_title);
+        mEtDescription = (TextView) root.findViewById(R.id.task_add_et_description);
+
         mTaskBinding = FragmentAddTaskBinding.bind(root);
+
         setHasOptionsMenu(true);
         setRetainInstance(true); // 保留Fragment的单例
         return root;
@@ -64,11 +69,13 @@ public class AddEditTaskFragment extends Fragment implements AddEditTaskContract
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_fab_edit_task_done);
+        FloatingActionButton fab = (FloatingActionButton)
+                getActivity().findViewById(R.id.task_add_fab_edit_task_done);
         fab.setImageResource(R.drawable.ic_done);
         // 点击Fab按钮, 保存任务
         fab.setOnClickListener(v -> {
-            mPresenter.saveTask(mEtTitle.getText().toString(), mEtDescription.getText().toString());
+            mPresenter.saveTask(mEtTitle.getText().toString(),
+                    mEtDescription.getText().toString());
         });
     }
 

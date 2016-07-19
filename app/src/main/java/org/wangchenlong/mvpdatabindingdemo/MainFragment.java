@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,15 +22,14 @@ import org.wangchenlong.mvpdatabindingdemo.addedittask.AddEditTaskActivity;
 import org.wangchenlong.mvpdatabindingdemo.data.Task;
 import org.wangchenlong.mvpdatabindingdemo.databinding.FragmentTasksBinding;
 import org.wangchenlong.mvpdatabindingdemo.taskdetail.TaskDetailActivity;
-import org.wangchenlong.mvpdatabindingdemo.tasks.TasksListAdapter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksContract;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksFilterType;
+import org.wangchenlong.mvpdatabindingdemo.tasks.TasksListAdapter;
 import org.wangchenlong.mvpdatabindingdemo.tasks.TasksViewModel;
+import org.wangchenlong.mvpdatabindingdemo.widgets.ScrollChildSwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -51,6 +52,7 @@ public class MainFragment extends Fragment implements TasksContract.View {
 
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         // 设置DataBinding
         FragmentTasksBinding tasksBinding = FragmentTasksBinding.inflate(inflater, container, false);
         tasksBinding.setTasks(mViewModel);
@@ -58,7 +60,7 @@ public class MainFragment extends Fragment implements TasksContract.View {
 
         // ListView的设置
         ListView listView = tasksBinding.tasksLvList;
-        mTasksListAdapter = new TasksListAdapter(new ArrayList<>(0), mPresenter);
+        mTasksListAdapter = new TasksListAdapter(new ArrayList<Task>(0), mPresenter);
         listView.setAdapter(mTasksListAdapter);
 
         // Fab按钮添加任务
@@ -66,10 +68,17 @@ public class MainFragment extends Fragment implements TasksContract.View {
         fab.setImageResource(R.drawable.ic_add);
         fab.setOnClickListener(v -> mPresenter.addNewTask());
 
+        final ScrollChildSwipeRefreshLayout swipeRefreshLayout = tasksBinding.tasksScsrlRefreshLayout;
+        swipeRefreshLayout.setColorSchemeColors(
+                ContextCompat.getColor(getContext(), R.color.colorPrimary),
+                ContextCompat.getColor(getContext(), R.color.colorAccent),
+                ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark)
+        );
+        swipeRefreshLayout.setScrollUpChild(listView);
+
         setHasOptionsMenu(true); // 设置显示菜单
 
         View root = tasksBinding.getRoot();
-        ButterKnife.bind(root);
 
         return root;
     }
@@ -167,16 +176,20 @@ public class MainFragment extends Fragment implements TasksContract.View {
      */
     @Override public void showTasks(List<Task> tasks) {
         // 显示全部任务
-        if (tasks != null) {
-            mTasksListAdapter.replaceData(tasks);
-            mViewModel.setTaskListSize(tasks.size());
-        } else {
-            mViewModel.setTaskListSize(0);
-        }
+        mTasksListAdapter.replaceData(tasks);
+        mViewModel.setTaskListSize(tasks.size());
     }
 
     @Override public void setLoadingIndicator(boolean active) {
+        // 已经关闭, 直接返回
+        if (getView() == null) {
+            return;
+        }
 
+        final SwipeRefreshLayout srl = (SwipeRefreshLayout)
+                getView().findViewById(R.id.tasks_scsrl_refresh_layout);
+
+        srl.post(() -> srl.setRefreshing(active));
     }
 
     // 判断是否加载页面, 用于处理一些异步任务, 网络加载完成.

@@ -27,7 +27,9 @@ public class TasksListAdapter extends BaseAdapter {
      * @param tasks               任务
      * @param userActionsListener 监听
      */
-    public TasksListAdapter(List<Task> tasks, TasksContract.Presenter userActionsListener) {
+    public TasksListAdapter(
+            List<Task> tasks,
+            TasksContract.Presenter userActionsListener) {
         setList(tasks);
         mUserActionsListener = userActionsListener;
     }
@@ -65,7 +67,8 @@ public class TasksListAdapter extends BaseAdapter {
             binding = DataBindingUtil.getBinding(convertView);
         }
 
-        TasksItemActionHandler itemActionHandler = new TasksItemActionHandler(mUserActionsListener);
+        TasksItemActionHandler itemActionHandler
+                = new TasksItemActionHandler(mUserActionsListener);
         binding.setActionHandler(itemActionHandler);
         binding.setTask(task);
         binding.executePendingBindings();

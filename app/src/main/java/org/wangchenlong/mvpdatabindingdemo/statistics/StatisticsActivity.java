@@ -43,8 +43,8 @@ public class StatisticsActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setTitle(R.string.statistics_title);
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
             ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
 
         mDlDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
@@ -67,7 +67,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         // Fragment设置表示层Presenter
         StatisticsPresenter statisticsPresenter = new StatisticsPresenter(
-                Injection.providerTasksRepository(getApplicationContext()), statisticsViewModel);
+                Injection.provideTasksRepository(getApplicationContext()), statisticsViewModel);
         statisticsFragment.setPresenter(statisticsPresenter);
     }
 

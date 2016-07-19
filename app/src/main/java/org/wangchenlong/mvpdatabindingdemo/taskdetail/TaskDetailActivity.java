@@ -2,8 +2,10 @@ package org.wangchenlong.mvpdatabindingdemo.taskdetail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.widget.FrameLayout;
 import org.wangchenlong.mvpdatabindingdemo.Injection;
 import org.wangchenlong.mvpdatabindingdemo.R;
 import org.wangchenlong.mvpdatabindingdemo.utils.ActivityUtils;
+import org.wangchenlong.mvpdatabindingdemo.utils.EspressoIdlingResource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,12 +60,17 @@ public class TaskDetailActivity extends AppCompatActivity {
         }
 
         new TaskDetailPresenter(fragment, taskId,
-                Injection.providerTasksRepository(getApplicationContext()));
+                Injection.provideTasksRepository(getApplicationContext()));
 
     }
 
     @Override public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 }
